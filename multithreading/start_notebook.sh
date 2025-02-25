@@ -28,6 +28,7 @@ elif [[ "${HOSTNAME}" == *".rc.ucl.ac.uk" ]]; then
     # Fibonacci or Mandelbrot
     SERVER="${HOSTNAME}"
     export JULIAUP_CHANNEL=1.11 # Make sure we use the right channel
+    export JULIA_NUM_THREADS=16
 fi
 
 echo "On your local machine run
@@ -43,7 +44,6 @@ if [[ "${HOSTNAME}" == "ipu-pod64-server1" ]]; then
     export LD_PRELOAD=$(realpath ~/repo/resolv_wrapper/build/src/libresolv_wrapper.so)
 fi
 
-export JULIA_NUM_THREADS=16
 julia --project -e "
 import Pkg
 Pkg.instantiate()

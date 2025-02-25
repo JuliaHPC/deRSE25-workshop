@@ -100,13 +100,13 @@ M = [rand(100,100) for i in 1:(8 * nthreads())];
 tmap(svdvals, M);
 
 # ╔═╡ 2973daf0-fdf5-493c-b26f-460b5c59bfe9
-elapsed_serial_map_svdals = @belapsed map(svdvals, $M) samples=10 evals=3
+serial_map_svdals_b = @benchmark map(svdvals, $M) samples=10 evals=3
 
 # ╔═╡ 30d01115-5724-4d31-99ab-0228c4383442
-elapsed_threaded_map_svdals = @belapsed tmap(svdvals, $M) samples=10 evals=3
+threaded_map_svdals_b = @benchmark tmap(svdvals, $M) samples=10 evals=3
 
 # ╔═╡ c1145c9d-edbf-4d80-8633-958f99910ad2
-(elapsed_serial_map_svdals / elapsed_threaded_map_svdals) / nthreads() * 100 # parallel efficiency
+(minimum(serial_map_svdals_b.times) / minimum(threaded_map_svdals_b.times)) / nthreads() * 100 # parallel efficiency
 
 # ╔═╡ 6e87dbc7-7040-4c80-80fe-d15be7dbe6cd
 md"""
@@ -326,11 +326,8 @@ end
 # ╔═╡ 7d87cfba-280d-4b04-8abd-9ea5e97c9c64
 pi_threads_static_b = @benchmark pi_string_threads_static(N_pi)
 
-# ╔═╡ 2862f5ba-0f80-4ab0-9578-ba2d64451f96
-pi_threads_static_t = minimum(pi_threads_static_b.times)
-
 # ╔═╡ 92e165ab-0b75-4334-b904-88f991a13745
-pi_serial_t / pi_threads_static_t / nthreads() * 100 # parallel efficiency
+pi_serial_t / minimum(pi_threads_static_b.times) / nthreads() * 100 # parallel efficiency
 
 # ╔═╡ 91e0e138-3d29-48be-810d-465488c49406
 md"""
@@ -352,11 +349,31 @@ end
 # ╔═╡ e9d36306-2cdd-4015-b790-0941c3216e53
 pi_threads_dynamic_b = @benchmark pi_string_threads_dynamic(N_pi)
 
-# ╔═╡ 613531b8-6ba9-441a-b5b4-4edb5b35795a
-pi_threads_dynamic_t = minimum(pi_threads_dynamic_b.times)
-
 # ╔═╡ b998b5aa-da7c-4fcf-98e7-67c013d297b4
-pi_serial_t / pi_threads_dynamic_t / nthreads() * 100
+pi_serial_t / minimum(pi_threads_dynamic_b.times) / nthreads() * 100 # parallel efficiency
+
+# ╔═╡ 3c5dc7f5-a08d-4e54-9aea-89b8cdfe0f06
+md"""
+#### For-loop: greedy scheduler (only Julia v1.11+)
+"""
+
+# ╔═╡ 787cc8b2-a541-4614-84f1-ce641fd6f96d
+function pi_string_threads_greedy(N)
+    digits = Vector{Int}(undef, N)
+    @threads :greedy for n in eachindex(digits)
+        digits[n] = pi_digit(n)
+    end
+    return "0x3." * join(string.(digits, base = 16)) * "p0"
+end
+
+# ╔═╡ 7bd079f3-fe13-4191-a01d-5f6288fba5bf
+@assert pi_string_threads_greedy(N_pi) == pi_string(N_pi)
+
+# ╔═╡ a7edbd19-0342-4235-9c11-df49e54059b7
+pi_threads_greedy_b = @benchmark pi_string_threads_greedy(N_pi)
+
+# ╔═╡ 1cacbcb4-82a3-4769-876f-e61a04c04626
+pi_serial_t / minimum(pi_threads_greedy_b.times) / nthreads() * 100 # parallel efficiency
 
 # ╔═╡ deea8134-0952-4948-8a92-bdada62a60f3
 md"""
@@ -376,11 +393,8 @@ end
 # ╔═╡ d4854d9e-824f-4225-9ce8-8ddefb543478
 pi_tasks_b = @benchmark pi_string_tasks(N_pi)
 
-# ╔═╡ f5c3f867-a61f-4a71-86e8-078c79681973
-pi_tasks_t = minimum(pi_tasks_b.times)
-
 # ╔═╡ 2e4ff435-60db-49c2-8822-1f6d4c35d04c
-pi_serial_t / pi_tasks_t / nthreads() * 100
+pi_serial_t / minimum(pi_tasks_b.times) / nthreads() * 100 # parallel efficiency
 
 # ╔═╡ 5a183210-6fb3-416e-aa1f-e8de5c3b7672
 md"""
@@ -404,11 +418,8 @@ end
 # ╔═╡ edc876d6-3ad4-4016-9e9b-f1bffc704284
 pi_omt_b = @benchmark pi_string_omt(N_pi; ntasks=32 * nthreads())
 
-# ╔═╡ ff7d0720-a5f7-48aa-b0ed-d86ac4ea0aa2
-pi_omt_t = minimum(pi_omt_b.times)
-
 # ╔═╡ 287e5268-25a2-41ad-aa34-da65ac4f4553
-pi_serial_t / pi_omt_t / nthreads() * 100 # parallel efficiency
+pi_serial_t / minimum(pi_omt_b.times) / nthreads() * 100 # parallel efficiency
 
 # ╔═╡ 0c103dd4-8933-4d11-9d37-2feb64e5c5cc
 md"""
@@ -964,25 +975,26 @@ version = "17.4.0+2"
 # ╠═feede8b2-0755-40cc-a6e5-a0855fb87cba
 # ╠═38a05e8e-482f-4a69-8c4c-b62fb157cf73
 # ╠═7d87cfba-280d-4b04-8abd-9ea5e97c9c64
-# ╠═2862f5ba-0f80-4ab0-9578-ba2d64451f96
 # ╠═92e165ab-0b75-4334-b904-88f991a13745
 # ╟─91e0e138-3d29-48be-810d-465488c49406
 # ╠═be136b87-4421-4607-b40c-672c46011f58
 # ╠═d55a8275-b030-4847-a75d-242fee7b00ec
 # ╠═e9d36306-2cdd-4015-b790-0941c3216e53
-# ╠═613531b8-6ba9-441a-b5b4-4edb5b35795a
 # ╠═b998b5aa-da7c-4fcf-98e7-67c013d297b4
+# ╟─3c5dc7f5-a08d-4e54-9aea-89b8cdfe0f06
+# ╠═787cc8b2-a541-4614-84f1-ce641fd6f96d
+# ╠═7bd079f3-fe13-4191-a01d-5f6288fba5bf
+# ╠═a7edbd19-0342-4235-9c11-df49e54059b7
+# ╠═1cacbcb4-82a3-4769-876f-e61a04c04626
 # ╟─deea8134-0952-4948-8a92-bdada62a60f3
 # ╠═b8111477-848e-4862-abc0-00bf54545109
 # ╠═3b924baf-cc2a-41b3-8af6-bc7107cbe21d
 # ╠═d4854d9e-824f-4225-9ce8-8ddefb543478
-# ╠═f5c3f867-a61f-4a71-86e8-078c79681973
 # ╠═2e4ff435-60db-49c2-8822-1f6d4c35d04c
 # ╟─5a183210-6fb3-416e-aa1f-e8de5c3b7672
 # ╠═d92687f4-40fd-488f-8348-770b254e1d5f
 # ╠═664c1906-1e3a-4d35-a131-b8fc3a4cb329
 # ╠═edc876d6-3ad4-4016-9e9b-f1bffc704284
-# ╠═ff7d0720-a5f7-48aa-b0ed-d86ac4ea0aa2
 # ╠═287e5268-25a2-41ad-aa34-da65ac4f4553
 # ╟─0c103dd4-8933-4d11-9d37-2feb64e5c5cc
 # ╠═2adcdd0e-8544-41ec-8cf3-c82d5019bf65
