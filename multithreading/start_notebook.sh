@@ -27,6 +27,7 @@ if [[ "${HOSTNAME}" == "ipu-pod64-server1" ]]; then
 elif [[ "${HOSTNAME}" == *".rc.ucl.ac.uk" ]]; then
     # Fibonacci or Mandelbrot
     SERVER="${HOSTNAME}"
+    export JULIAUP_CHANNEL=1.11 # Make sure we use the right channel
 fi
 
 echo "On your local machine run
@@ -43,7 +44,7 @@ if [[ "${HOSTNAME}" == "ipu-pod64-server1" ]]; then
 fi
 
 export JULIA_NUM_THREADS=16
-julia --project=. -e "
+julia --project -e "
 import Pkg
 Pkg.instantiate()
 import Pluto
