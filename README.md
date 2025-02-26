@@ -10,14 +10,14 @@ Download and install Julia for your platform from [here](https://julialang.org/d
 
 ### Installing Pluto.jl
 Start Julia 
-```shell
+```console
 $ julia
                _
    _       _ _(_)_     |  Documentation: https://docs.julialang.org
   (_)     | (_) (_)    |
    _ _   _| |_  __ _   |  Type "?" for help, "]?" for Pkg help.
   | | | | | | |/ _` |  |
-  | | |_| | | | (_| |  |  Version 1.10.4 (2024-06-04)
+  | | |_| | | | (_| |  |  Version 1.11.3 (2025-01-21)
  _/ |\__'_|_|_|\__'_|  |  Official https://julialang.org/ release
 |__/                   |
 
