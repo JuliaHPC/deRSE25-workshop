@@ -20,7 +20,7 @@ RUN julia --color=yes -e 'using InteractiveUtils; versioninfo()'
 RUN mkdir -p /root/.julia/environments/v1.11
 COPY Project.toml  /root/.julia/environments/v1.11/Project.toml
 # Preinstall some common packages across all notebooks
-RUN . /julia_cpu_target.sh && julia --color=yes -e 'using Pkg; Pkg.add(["Pluto", "KernelAbstractions", "ThreadPinning", "PlutoUI", "CairoMakie"])'
+RUN . /julia_cpu_target.sh && julia --color=yes -e 'using Pkg; Pkg.add(["BenchmarkingTool", "CairoMakie", "CUDA", "KernelAbstractions", "oneAPI", "Pluto", "PlutoUI", "ThreadPinning"])'
 
 # Copy notebooks
 COPY exercises/gradient_descent.jl /root/exercises/gradient_descent.jl
