@@ -1,5 +1,7 @@
 # deRSE'25 Julia tutorial 
 
+This repository contains material for the [Performance portability and high-performance computing with Julia](https://events.hifis.net/event/1741/contributions/13973/) workshop at the [5th conference for Research Software Engineering in Germany](https://events.hifis.net/event/1741/) (deRSE25).
+
 To find prerendered notebooks go to https://juliahpc.github.io/deRSE25-workshop/.
 
 ## Requirements
