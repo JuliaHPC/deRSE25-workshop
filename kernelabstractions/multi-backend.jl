@@ -209,15 +209,9 @@ version = "0.15.5+0"
 
 [[deps.ColorTypes]]
 deps = ["FixedPointNumbers", "Random"]
-git-tree-sha1 = "c7acce7a7e1078a20a285211dd73cd3941a871d6"
+git-tree-sha1 = "b10d0b65641d57b8b4d5e234446582de5047050d"
 uuid = "3da002f7-5984-5a60-b8a6-cbb66c0b333f"
-version = "0.12.0"
-
-    [deps.ColorTypes.extensions]
-    StyledStringsExt = "StyledStrings"
-
-    [deps.ColorTypes.weakdeps]
-    StyledStrings = "f489334b-da3d-4c2e-b8f0-e476e12c162b"
+version = "0.11.5"
 
 [[deps.Colors]]
 deps = ["ColorTypes", "FixedPointNumbers", "Reexport"]
@@ -321,6 +315,11 @@ git-tree-sha1 = "199f213e40a7982e9138bc9edc3299419d510390"
 uuid = "61eb1bfa-7361-4325-ad38-22787b887f55"
 version = "1.2.0"
 
+[[deps.GPUToolbox]]
+git-tree-sha1 = "52ad2902dda44ab527891317e144e7f718ab77d7"
+uuid = "096a3bc2-3ced-46d0-87f4-dd12716f4bfc"
+version = "0.1.0"
+
 [[deps.HashArrayMappedTries]]
 git-tree-sha1 = "2eaa69a7cab70a52b9687c8bf950a5a93ec895ae"
 uuid = "076d061b-32b6-4027-95e0-9a2c6f6d7e74"
@@ -334,9 +333,9 @@ version = "2.12.0+0"
 
 [[deps.Hyperscript]]
 deps = ["Test"]
-git-tree-sha1 = "8d511d5b81240fc8e6802386302675bdf47737b9"
+git-tree-sha1 = "179267cfa5e712760cd43dcae385d7ea90cc25a4"
 uuid = "47d2ed2b-36de-50cf-bf87-49c2cf4b8b91"
-version = "0.0.4"
+version = "0.0.5"
 
 [[deps.HypertextLiteral]]
 deps = ["Tricks"]
@@ -502,6 +501,11 @@ version = "0.3.29"
 uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
 version = "1.11.0"
 
+[[deps.MIMEs]]
+git-tree-sha1 = "1833212fd6f580c20d4291da9c1b4e8a655b128e"
+uuid = "6c6e2e6c-3030-632d-7369-2d6c69616d65"
+version = "1.0.0"
+
 [[deps.MacroTools]]
 git-tree-sha1 = "72aebe0b5051e5143a079a4685a46da330a40472"
 uuid = "1914dd2f-81c6-5fcd-8719-6d5c9610ff09"
@@ -598,10 +602,10 @@ version = "1.11.0"
     REPL = "3fa0cd96-eef1-5676-8a61-b3b8758bbffb"
 
 [[deps.PlutoUI]]
-deps = ["AbstractPlutoDingetjes", "Base64", "Dates", "Hyperscript", "HypertextLiteral", "IOCapture", "InteractiveUtils", "JSON", "Logging", "Markdown", "Random", "Reexport", "UUIDs"]
-git-tree-sha1 = "5152abbdab6488d5eec6a01029ca6697dff4ec8f"
+deps = ["AbstractPlutoDingetjes", "Base64", "ColorTypes", "Dates", "FixedPointNumbers", "Hyperscript", "HypertextLiteral", "IOCapture", "InteractiveUtils", "JSON", "Logging", "MIMEs", "Markdown", "Random", "Reexport", "URIs", "UUIDs"]
+git-tree-sha1 = "7e71a55b87222942f0f9337be62e26b1f103d3e4"
 uuid = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
-version = "0.7.23"
+version = "0.7.61"
 
 [[deps.PooledArrays]]
 deps = ["DataAPI", "Future"]
@@ -811,6 +815,11 @@ git-tree-sha1 = "6cae795a5a9313bbb4f60683f7263318fc7d1505"
 uuid = "410a4b4d-49e4-4fbc-ab6d-cb71b17b3775"
 version = "0.1.10"
 
+[[deps.URIs]]
+git-tree-sha1 = "67db6cc7b3821e19ebe75791a9dd19c9b1188f2b"
+uuid = "5c2747f8-b7ea-4ff2-ba2e-563bfd36b1d4"
+version = "1.5.1"
+
 [[deps.UUIDs]]
 deps = ["Random", "SHA"]
 uuid = "cf7118a7-6976-5b1a-9a39-7adc72f591a4"
@@ -859,10 +868,10 @@ uuid = "8e850ede-7688-5339-a07c-302acd2aaf8d"
 version = "1.59.0+0"
 
 [[deps.oneAPI]]
-deps = ["Adapt", "CEnum", "ExprTools", "GPUArrays", "GPUCompiler", "KernelAbstractions", "LLVM", "Libdl", "LinearAlgebra", "NEO_jll", "Preferences", "Printf", "Random", "SPIRVIntrinsics", "SPIRV_LLVM_Translator_unified_jll", "SPIRV_Tools_jll", "SparseArrays", "SpecialFunctions", "StaticArrays", "oneAPI_Level_Zero_Headers_jll", "oneAPI_Level_Zero_Loader_jll", "oneAPI_Support_jll"]
-git-tree-sha1 = "66698df0dc75c6f8ec96f5e66f4c9ac21345bfe7"
+deps = ["Adapt", "CEnum", "ExprTools", "GPUArrays", "GPUCompiler", "GPUToolbox", "KernelAbstractions", "LLVM", "Libdl", "LinearAlgebra", "NEO_jll", "Preferences", "Printf", "Random", "SPIRVIntrinsics", "SPIRV_LLVM_Translator_unified_jll", "SPIRV_Tools_jll", "SparseArrays", "SpecialFunctions", "StaticArrays", "oneAPI_Level_Zero_Headers_jll", "oneAPI_Level_Zero_Loader_jll", "oneAPI_Support_jll"]
+git-tree-sha1 = "18446b73cca5e88001c9b9facb3e76c8c26be3f0"
 uuid = "8f75cd03-7ff8-4ecb-9b8f-daf728133b1b"
-version = "2.0.1"
+version = "2.0.2"
 
 [[deps.oneAPI_Level_Zero_Headers_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
