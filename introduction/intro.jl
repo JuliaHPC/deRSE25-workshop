@@ -1,6 +1,9 @@
 ### A Pluto.jl notebook ###
 # v0.20.4
 
+#> [frontmatter]
+#> title = "Introduction"
+
 using Markdown
 using InteractiveUtils
 
@@ -369,6 +372,65 @@ md"""
     Tim Besard recently gave a webinar on performance portable GPU programming
 
     https://www.youtube.com/watch?v=QvlBmh1t9I4
+
+"""
+
+# ╔═╡ 9532853d-67b2-4980-a7ea-3fc872694d92
+md"""
+### Composable infrastructure
+
+#### Core
+- GPUCompiler.jl: Takes native Julia code and compiles it directly to GPUs
+- GPUArrays.jl: High-level array based common functionality
+- KerneAbstractions.jl: Vendor-agnostic kernel programming language
+- Adapt.jl: Translate complex structs across the host-device boundary
+
+#### Vendor specific
+- CUDA.jl
+- AMDGPU.jl
+- oneAPI.jl
+- Metal.jl
+
+"""
+
+# ╔═╡ fe95495e-674f-4d0a-a330-8ee9b0d91b6a
+md"""
+### Different layers of abstraction
+
+#### Vendor-specific
+```julia
+using CUDA
+
+function saxpy!(a,X,Y)
+	i = (blockIdx().x - 1) * blockDim().x + threadIdx().x
+	if i <= length(Y)
+		@inbounds Y[i] = a * X[i] + Y[i]
+	end
+	return nothing
+end
+
+@cuda threads=32 blocks=cld(length(Y), 32) saxpy!(a, X, Y)
+```
+
+#### KernelAbstractions
+
+```julia
+using KernelAbstractions
+using CUDA
+
+@kernel function saxpy!(a, @Const(X), Y)
+    I = @index(Global)
+    @inbounds Y[I] = a * X[I] + Y[I]
+end
+
+saxpy!(CUDABackend())(a, X, Y, ndrange=length(Y))
+```
+
+#### Array abstractions
+
+```julia
+Y .= a .* X .+ Y
+```
 
 """
 
@@ -1931,8 +1993,8 @@ version = "3.6.0+0"
 # ╟─cfe07ec9-8470-48ef-82bb-f224812d0663
 # ╟─83fd4129-f9bf-47af-a9ea-505511909ebe
 # ╟─a45d80d7-6160-4194-8112-5630767629db
-# ╠═63ba95f0-0a04-11ee-30b5-65d2b018e857
-# ╠═6fc6fe75-b249-48cc-9e85-6c942cb56b86
+# ╟─63ba95f0-0a04-11ee-30b5-65d2b018e857
+# ╟─6fc6fe75-b249-48cc-9e85-6c942cb56b86
 # ╟─1c983ad9-bd78-422c-a703-97f0a3d08b91
 # ╟─787967f5-78f0-41d3-b786-078dfe3c5a8d
 # ╟─2e9c1107-4378-4afb-b2e7-3c86f72473fa
@@ -1960,5 +2022,7 @@ version = "3.6.0+0"
 # ╠═9c5fb5b0-76b6-4ff8-b4ba-f6a66754241f
 # ╟─fc674951-8a6a-4d2c-8d43-d9626f62e028
 # ╟─1914c723-d9cd-4269-9a3d-ce617c854ce4
+# ╟─9532853d-67b2-4980-a7ea-3fc872694d92
+# ╟─fe95495e-674f-4d0a-a330-8ee9b0d91b6a
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
