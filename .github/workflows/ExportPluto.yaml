@@ -23,6 +23,7 @@ jobs:
         environment:
           name: github-pages
           url: ${{ steps.deployment.outputs.page_url }}
+        runs-on: ubuntu-latest
         steps:
             - name: Checkout this repository
               uses: actions/checkout@v3
