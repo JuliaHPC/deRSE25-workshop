@@ -1,6 +1,15 @@
 ### A Pluto.jl notebook ###
 # v0.20.4
 
+#> [frontmatter]
+#> title = "Multi-threading in Julia"
+#> date = "2025-02-27"
+#> tags = ["deRSE25", "multi-threading", "julialang"]
+#>
+#>     [[frontmatter.author]]
+#>     name = "Mosè Giordano"
+#>     url = "https://giordano.github.io/"
+
 using Markdown
 using InteractiveUtils
 

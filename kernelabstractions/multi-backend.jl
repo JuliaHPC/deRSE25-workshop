@@ -1,6 +1,16 @@
 ### A Pluto.jl notebook ###
 # v0.20.4
 
+#> [frontmatter]
+#> title = "KernelAbstractions"
+#> date = "2025-02-26"
+#> tags = ["deRSE25", "multi-threading", "julialang"]
+#> description = "Demo of multi-backend KernelAbstraction code"
+#>
+#>     [[frontmatter.author]]
+#>     name = "Mosè Giordano"
+#>     url = "https://giordano.github.io/"
+
 using Markdown
 using InteractiveUtils
 
