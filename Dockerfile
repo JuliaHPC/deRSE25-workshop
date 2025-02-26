@@ -22,6 +22,9 @@ COPY Project.toml  /root/.julia/environments/v1.11/Project.toml
 RUN . /julia_cpu_target.sh && julia --color=yes -e 'using Pkg; Pkg.add(["Pluto", "KernelAbstractions", "ThreadPinning", "PlutoUI", "CairoMakie"])'
 
 # Copy notebooks
+COPY exercises/gradient_descent.jl /root/exercises/gradient_descent.jl
+COPY exercises/trees.jl /root/exercises/trees.jl
+COPY introduction/Going_fast_nowhere.jl /root/introduction/Going_fast_nowhere.jl
 COPY introduction/intro.jl /root/introduction/intro.jl
 COPY kernelabstractions/diffusion.jl /root/kernelabstractions/diffusion.jl
 COPY kernelabstractions/diffusion_kernel.jl /root/kernelabstractions/diffusion_kernel.jl
