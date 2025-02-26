@@ -20,7 +20,7 @@ RUN mkdir -p /root/.julia/environments/v1.11
 COPY Project.toml  /root/.julia/environments/v1.11/Project.toml
 RUN . /julia_cpu_target.sh && julia --color=yes -e 'using Pkg; Pkg.instantiate()'
 # Preinstall some common packages across all notebooks
-RUN . /julia_cpu_target.sh && julia --color=yes -e 'using Pkg; Pkg.install(["KernelAbstractions", "ThreadPinning"])'
+RUN . /julia_cpu_target.sh && julia --color=yes -e 'using Pkg; Pkg.add(["KernelAbstractions", "ThreadPinning"])'
 
 # Copy notebooks
 COPY introduction/intro.jl /root/introduction/intro.jl
