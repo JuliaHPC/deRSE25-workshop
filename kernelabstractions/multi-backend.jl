@@ -68,7 +68,16 @@ function matmul!(output, a, b)
 end
 
 # ╔═╡ f6d36421-e21c-4949-a67a-3ffa10771f7e
-@bind backend Select([CPU(), CUDABackend(), oneAPIBackend()])
+let
+	available_backends = KernelAbstractions.Backend[CPU()]
+	if CUDA.functional()
+		push!(available_backends, CUDABackend())
+	end
+	if oneAPI.functional()
+		push!(available_backends, oneAPIBackend())
+	end
+	@bind backend Select(available_backends)
+end
 
 # ╔═╡ edfdc66c-aa13-4335-b6c3-e542c84bed93
 a = randn!(allocate(backend, Float32, 256, 123));
