@@ -55,10 +55,12 @@ md"""
 """
 
 # ╔═╡ 4a31b295-ec6f-4285-aaa9-03fa83df60b0
-threadinfo()
+with_terminal() do
+	threadinfo()
+end
 
 # ╔═╡ 25e4adfe-b5cf-4491-b599-f66426f3a20f
-begin
+with_terminal() do
 	pinthreads(:cores)
 	threadinfo()
 end
@@ -191,17 +193,22 @@ function overhead!(v)
     for idx in eachindex(v)
         v[idx] = idx
     end
+	return v
 end
 
 # ╔═╡ 08dcc36f-a1ed-4d24-92e6-a5bca2f2fcf7
 function overhead_threads!(v)
-    @threads for idx in eachindex(v)
-        v[idx] = idx
-    end
+	@threads for idx in eachindex(v)
+		v[idx] = idx
+	end
+	return v
 end
 
 # ╔═╡ c11cbb81-99d1-486b-9919-fc7fe976618b
 md"N = $(@bind N Slider(10 .^ (0:9); default=10, show_value=true))"
+
+# ╔═╡ 662dfbf2-1d02-468c-aabf-2a24bdc86e54
+@assert overhead!(Vector{Int}(undef, N)) == overhead_threads!(Vector{Int}(undef, N))
 
 # ╔═╡ cbc0c9e5-0591-41fe-8033-c3cebefcf349
 @btime overhead!(v) setup=(v = Vector{Int}(undef, N));
@@ -955,6 +962,7 @@ version = "17.4.0+2"
 # ╟─f81966bb-bd14-4bd9-88cd-d850fe724df5
 # ╠═b0753df5-f7f3-4724-ba95-4a19210758a4
 # ╠═08dcc36f-a1ed-4d24-92e6-a5bca2f2fcf7
+# ╠═662dfbf2-1d02-468c-aabf-2a24bdc86e54
 # ╟─c11cbb81-99d1-486b-9919-fc7fe976618b
 # ╠═cbc0c9e5-0591-41fe-8033-c3cebefcf349
 # ╠═467afccf-d12a-4714-897a-243e59ce9c4d
