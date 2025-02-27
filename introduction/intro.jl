@@ -159,6 +159,52 @@ In order of preference:
 
 """
 
+# ╔═╡ 299f10aa-0ba7-4e67-a4f5-b2a885b379b3
+md"""
+## Package manager and reproducibility
+
+- `Project.toml`: Describes the dependencies and compatibilities
+- `Manifest.toml`: Record of precise versions of all direct & indirect dependencies
+
+```
+(@v1.5) pkg> st
+Status `~/.julia/environments/v1.5/Project.toml`
+  [7da242da] Enzyme v0.3.0
+
+(@v1.5) pkg> up
+   Updating registry at `~/.julia/registries/General`
+############################################### 100.0%
+Updating `~/.julia/environments/v1.5/Project.toml`
+  [7da242da] ↑ Enzyme v0.3.0 ⇒ v0.3.1
+Updating `~/.julia/environments/v1.5/Manifest.toml`
+  [7da242da] ↑ Enzyme v0.3.0 ⇒ v0.3.1
+  [7cc45869] ↑ Enzyme_jll v0.0.5+0 ⇒ v0.0.6+0
+```
+
+> Pkg3: Julia’s New Package Manager
+> 
+> https://www.youtube.com/watch?v=-yUiLCGegJs 
+"""
+
+# ╔═╡ d022561a-780b-4964-86e4-db47a408ed54
+md"""
+### Yggdrasil & BinaryBuilder.jl
+
+- Binarybuilder: (https://binarybuilder.org/)
+  - Sandboxed cross-compiler
+  - Encodes best practices
+
+- JLL Packages: 
+  - Binary dependencies packaged as Artifacts 
+
+- Yggdrasil:
+  - Collection of build recipes
+
+> What’s new in Pkg: Artifacts & Binaries
+>
+> https://www.youtube.com/watch?v=xPhnJCAkI4k 
+"""
+
 # ╔═╡ faee4e9d-4e85-452b-87d1-4d85c96c677f
 md"""
 ## A brief introduction to Julia
@@ -295,7 +341,7 @@ md"""
 Julia uses LLVM for it's compilation pipeline.
 
 
-## Compiler stages
+### Compiler stages
 1. Parsing
 2. Lowering
 3. Abstract interpretation based type-inference
@@ -305,7 +351,7 @@ Julia uses LLVM for it's compilation pipeline.
 7. LLVM backend
 8. Native code
 
-## Compilation caching
+### Compilation caching
 Julia had for a long time the ability to perform native caching, to reduce startup latency (time-to-first-X), but it was limited to:
 
 1. System image
@@ -313,7 +359,7 @@ Julia had for a long time the ability to perform native caching, to reduce start
 
 Since Julia v1.9 we now create per package native caches in the form of package images, drastically lowering the latency of Julia.
 
-## Multi-versioning
+### Multi-versioning
 Julia supports multi-versioning of native cache files per micro-architecture,
 so if you are on an HPC system with heterogenous micro-architectures you may need
 to set `JULIA_CPU_TARGET` appropriately.
@@ -337,6 +383,61 @@ end
 with_terminal() do
 	@code_native debuginfo=:none 1.0 + 2.0
 end
+
+# ╔═╡ b1dcb967-cfd4-4961-9c70-d9e027be5eee
+md"""
+## Interaction with C & Fortran libraries
+
+- Julia has direct foreign call support for C & Fortran
+  - [`@ccall`](https://docs.julialang.org/en/v1/base/c/#Base.@ccall)
+  - [`Calling C and Fortran`](https://docs.julialang.org/en/v1/manual/calling-c-and-fortran-code)
+
+- Automatic wrapper generation with Clang.jl
+
+- `@cfunction` creates a C-function pointer to use as a callback
+- Be careful around GC interactions!
+
+"""
+
+# ╔═╡ 2497e952-8220-46e5-a1c5-4c24631bc026
+md"""
+### Example: UCX.jl
+
+```julia
+function ucp_put_nb(ep, buffer, length, remote_addr, rkey, cb)
+    ccall(
+        (:ucp_put_nb, libucp),
+        ucs_status_ptr_t,
+        (ucp_ep_h, Ptr{Cvoid}, Csize_t, UInt64, ucp_rkey_h, ucp_send_callback_t),
+        ep, buffer, length, remote_addr, rkey, cb)
+end
+```
+
+```julia
+function send_callback(req::Ptr{Cvoid}, status::API.ucs_status_t, user_data::Ptr{Cvoid})
+    @assert user_data !== C_NULL
+    request = UCXRequest(user_data)
+    request.status = status
+    notify(request)
+    API.ucp_request_free(req)
+    nothing
+end
+
+function put!(ep::UCXEndpoint, request, data::Ptr, nbytes, remote_addr, rkey)
+    cb = @cfunction(send_callback, Cvoid, (Ptr{Cvoid}, API.ucs_status_t, Ptr{Cvoid}))
+    ptr = ucp_put_nb(ep, data, nbytes, remote_addr, rkey, cb)
+    return handle_request(request, ptr)
+end
+
+function put!(ep::UCXEndpoint, buffer, nbytes, remote_addr, rkey)
+    request = UCXRequest(ep, buffer) # rooted through ep.worker
+    GC.@preserve buffer begin
+        data = pointer(buffer)
+        put!(ep, request, data, nbytes, remote_addr, rkey)
+    end
+end
+```
+"""
 
 # ╔═╡ fc674951-8a6a-4d2c-8d43-d9626f62e028
 md"""
@@ -398,6 +499,11 @@ stats = MPI.Waitall([rreq, sreq])
 
 MPI.Barrier(comm)
 ```
+"""
+
+# ╔═╡ 3a047128-7a69-4b88-8322-1b87f5950672
+md"""
+### MPIPreferences.jl
 """
 
 # ╔═╡ 1914c723-d9cd-4269-9a3d-ce617c854ce4
@@ -485,9 +591,13 @@ Julia and GPUArrays.jl provide support for an efficient GPU programming environm
   Write generic, reusable applications
 - BLAS (matrix-multiply, ...), and other libraries like FFT
 
-> Array operators using multiple dispatch: a design methodology for array implementations in dynamic languages (doi:10.1145/2627373.2627383)
+> Array operators using multiple dispatch: a design methodology for array implementations in dynamic languages 
+> 
+> (doi:10.1145/2627373.2627383)
 
-> Rapid software prototyping for heterogeneous and distributed platforms (doi:10.1016/j.advengsoft.2019.02.002)
+> Rapid software prototyping for heterogeneous and distributed platforms 
+>
+> (doi:10.1016/j.advengsoft.2019.02.002)
 """
 
 # ╔═╡ cf29f290-477e-4ac4-99dc-d4705d49ad0e
@@ -544,6 +654,35 @@ using CUDA
 gpu = adapt(CuArray, cpu)
 Model{Float64, CuArray{Float64, 2, CUDA.Mem.DeviceBuffer}}(...)
 ```
+"""
+
+# ╔═╡ 0d7ad3a6-6754-4a7e-ab1b-85dda17044b2
+md"""
+### PSA: Package extensions in Julia 1.9
+
+- Weak dependencies and package extensions
+  - GPU backends are often heavy dependencies
+  - Ideally user would only need one backend, but we often need to add methods to support different backends.
+  - https://pkgdocs.julialang.org/dev/creating-packages/#Conditional-loading-of-code-in-packages-(Extensions) 
+
+```toml
+name = "FastCode"
+version = "0.1.0"
+uuid = "..."
+
+[weakdeps]
+CUDA = "052768ef-5323-5732-b1bb-66c8b64840ba"
+
+[extensions]
+# name of extension to the left
+# extension dependencies required to load the extension to the right
+# use a list for multiple extension dependencies
+CUDAExt = "CUDA"
+
+[compat]
+CUDA = "4"
+```
+
 """
 
 # ╔═╡ 7d5f4c81-6913-4bee-a8e0-e5fe01e436db
@@ -2172,6 +2311,8 @@ version = "3.6.0+0"
 # ╟─787967f5-78f0-41d3-b786-078dfe3c5a8d
 # ╟─2e9c1107-4378-4afb-b2e7-3c86f72473fa
 # ╟─b80a8dd9-f3fd-4ff4-8190-3132e07762fc
+# ╟─299f10aa-0ba7-4e67-a4f5-b2a885b379b3
+# ╟─d022561a-780b-4964-86e4-db47a408ed54
 # ╟─faee4e9d-4e85-452b-87d1-4d85c96c677f
 # ╠═86033c1f-8099-4057-99b8-4214d215c021
 # ╠═e6333f0e-21bc-48e2-8fd9-b0b22fb1200e
@@ -2188,12 +2329,15 @@ version = "3.6.0+0"
 # ╠═ec185c9f-7909-47d8-8cc6-05b252d72a5d
 # ╠═5fc10869-ac5e-4440-ac36-eed90bffef8c
 # ╟─f09b6ee6-eea3-480f-b7b8-395b1575fdbe
-# ╟─c379062d-8b73-4b2a-a1ea-3ed2175ab7d8
+# ╠═c379062d-8b73-4b2a-a1ea-3ed2175ab7d8
 # ╠═639f9f11-aa65-473b-b24d-44f60b913d83
 # ╠═e42751a8-be45-418e-854d-6802ae47d8cd
 # ╠═42f1ca4e-2a03-47a7-be15-20a67c25f020
 # ╠═9c5fb5b0-76b6-4ff8-b4ba-f6a66754241f
+# ╟─b1dcb967-cfd4-4961-9c70-d9e027be5eee
+# ╟─2497e952-8220-46e5-a1c5-4c24631bc026
 # ╟─fc674951-8a6a-4d2c-8d43-d9626f62e028
+# ╠═3a047128-7a69-4b88-8322-1b87f5950672
 # ╟─1914c723-d9cd-4269-9a3d-ce617c854ce4
 # ╟─9532853d-67b2-4980-a7ea-3fc872694d92
 # ╟─fe95495e-674f-4d0a-a330-8ee9b0d91b6a
@@ -2201,6 +2345,7 @@ version = "3.6.0+0"
 # ╟─cf29f290-477e-4ac4-99dc-d4705d49ad0e
 # ╟─d5e1d232-4a88-45f1-ace5-0f2c1ba47423
 # ╟─5a3c565c-2a5f-436c-90ba-92ccbb39509d
+# ╟─0d7ad3a6-6754-4a7e-ab1b-85dda17044b2
 # ╟─7d5f4c81-6913-4bee-a8e0-e5fe01e436db
 # ╟─7c39d8fb-02c8-4b9c-8b54-704468ac38ce
 # ╠═2ea55487-7989-43c3-9b04-c1baef7a4ed3
