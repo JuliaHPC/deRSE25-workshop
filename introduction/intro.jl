@@ -359,6 +359,39 @@ Julia is being used for large-scale HPC applications:
 - Clima (clima.caltech.edu)
 - Trixi (https://trixi-framework.github.io/)
 - GPU4GEO (PASC) https://ptsolvers.github.io/GPU4GEO/about/
+
+### MPI.jl
+
+- Low-level interface to MPI C in `MPI.API`
+- Handles ABI concerns
+- Exports a more Julia "high-level" interface
+
+```julia
+using MPI
+MPI.Init()
+
+comm = MPI.COMM_WORLD
+rank = MPI.Comm_rank(comm)
+size = MPI.Comm_size(comm)
+
+dst = mod(rank+1, size)
+src = mod(rank-1, size)
+
+N = 4
+
+send_mesg = Array{Float64}(undef, N)
+recv_mesg = Array{Float64}(undef, N)
+
+fill!(send_mesg, Float64(rank))
+
+rreq = MPI.Irecv!(recv_mesg, comm; source=src, tag=src+32)
+
+sreq = MPI.Isend(send_mesg, comm; dest=dst, tag=rank+32)
+
+stats = MPI.Waitall([rreq, sreq])
+
+MPI.Barrier(comm)
+```
 """
 
 # ╔═╡ 1914c723-d9cd-4269-9a3d-ce617c854ce4
@@ -434,11 +467,72 @@ Y .= a .* X .+ Y
 
 """
 
+# ╔═╡ 7d5f4c81-6913-4bee-a8e0-e5fe01e436db
+md"""
+## Shared-memory parallelism
+
+- Julia is task-based (`M:N`-threading, green threads)
+- `Channel`, locks and atomics
+
+```julia
+function pfib(n::Int)
+    if n <= 1
+        return n
+    end
+    t = Threads.@spawn pfib(n-2)
+    return pfib(n-1) + fetch(t)::Int
+end
+```
+
+```julia
+using Base.Threads: @threads
+function prefix_threads!(⊕, y::AbstractVector)
+	l = length(y)
+	k = ceil(Int, log2(l))
+	# do reduce phase
+	for j = 1:k
+		@threads for i = 2^j:2^j:min(l, 2^k)
+			@inbounds y[i] = y[i - 2^(j - 1)] ⊕ y[i]
+		end
+	end
+	# do expand phase
+	for j = (k - 1):-1:1
+		@threads for i = 3*2^(j - 1):2^j:min(l, 2^k)
+			@inbounds y[i] = y[i - 2^(j - 1)] ⊕ y[i]
+		end
+	end
+	return y
+end
+A = fill(1, 500_000)
+prefix_threads!(+, A)
+```
+
+From
+
+> Nash et al., (2021). Basic Threading Examples in JuliaLang v1.3. JuliaCon Proceedings, 1(1), 54, https://doi.org/10.21105/jcon.00054
+"""
+
+# ╔═╡ 7c39d8fb-02c8-4b9c-8b54-704468ac38ce
+md"""
+### Useful packages
+
+- Atomix.jl for atomic operations on arrays (including GPU)
+- ThreadPinning.jl
+- OhMyThreads.jl
+"""
+
+# ╔═╡ 2ea55487-7989-43c3-9b04-c1baef7a4ed3
+
+
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
 CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
+
+[compat]
+CairoMakie = "~0.12.18"
+PlutoUI = "~0.7.60"
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000002
@@ -447,7 +541,7 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.11.3"
 manifest_format = "2.0"
-project_hash = "a60c7a97cc3bde5009566323d3d59e8af2e04668"
+project_hash = "9f15b8352e69bda68d03e34bb997430b0c2b46f3"
 
 [[deps.AbstractFFTs]]
 deps = ["LinearAlgebra"]
@@ -2024,5 +2118,8 @@ version = "3.6.0+0"
 # ╟─1914c723-d9cd-4269-9a3d-ce617c854ce4
 # ╟─9532853d-67b2-4980-a7ea-3fc872694d92
 # ╟─fe95495e-674f-4d0a-a330-8ee9b0d91b6a
+# ╟─7d5f4c81-6913-4bee-a8e0-e5fe01e436db
+# ╟─7c39d8fb-02c8-4b9c-8b54-704468ac38ce
+# ╠═2ea55487-7989-43c3-9b04-c1baef7a4ed3
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
