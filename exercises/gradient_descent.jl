@@ -8,6 +8,7 @@
 #>     [[frontmatter.author]]
 #>     name = "Valentin Churavy"
 #>     url = "https://vchuravy.dev"
+#>     image = "https://avatars.githubusercontent.com/u/145258?v=4"
 
 using Markdown
 using InteractiveUtils

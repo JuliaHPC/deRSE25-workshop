@@ -11,6 +11,7 @@
 #>     [[frontmatter.author]]
 #>     name = "Mosè Giordano"
 #>     url = "https://giordano.github.io/"
+#>     image = "https://avatars.githubusercontent.com/u/765740?v=4"
 
 using Markdown
 using InteractiveUtils
