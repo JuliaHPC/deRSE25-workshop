@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
-FROM ghcr.io/juliahpc/derse25-workshop:main
-# FROM julia:1.11.3
+FROM julia:1.11.3
+# FROM ghcr.io/juliahpc/derse25-workshop:main
 
 # Install git, for use within Codespaces
 RUN /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive \
