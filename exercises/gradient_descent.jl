@@ -3,6 +3,11 @@
 
 #> [frontmatter]
 #> title = "Exercise: Simple gradient descent"
+#> license = "MIT"
+#> 
+#>     [[frontmatter.author]]
+#>     name = "Valentin Churavy"
+#>     url = "https://vchuravy.dev
 
 using Markdown
 using InteractiveUtils

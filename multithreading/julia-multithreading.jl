@@ -4,6 +4,7 @@
 #> [frontmatter]
 #> title = "Multi-threading in Julia"
 #> date = "2025-02-27"
+#> license = "MIT"
 #> tags = ["deRSE25", "multi-threading", "julialang"]
 #>
 #>     [[frontmatter.author]]

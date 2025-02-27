@@ -1,6 +1,14 @@
 ### A Pluto.jl notebook ###
 # v0.20.4
 
+#> [frontmatter]
+#> title = "Exercise: Simple trees"
+#> license = "MIT"
+#> 
+#>     [[frontmatter.author]]
+#>     name = "Valentin Churavy"
+#>     url = "https://vchuravy.dev
+
 using Markdown
 using InteractiveUtils
 
