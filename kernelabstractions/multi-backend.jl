@@ -7,11 +7,11 @@
 #> license = "MIT"
 #> tags = ["deRSE25", "multi-threading", "julialang"]
 #> description = "Demo of multi-backend KernelAbstraction code"
-#>
+#> 
 #>     [[frontmatter.author]]
 #>     name = "Mosè Giordano"
-#>     url = "https://giordano.github.io/"
 #>     image = "https://avatars.githubusercontent.com/u/765740?v=4"
+#>     url = "https://giordano.github.io/"
 
 using Markdown
 using InteractiveUtils
@@ -175,9 +175,21 @@ version = "1.11.0"
 
 [[deps.Atomix]]
 deps = ["UnsafeAtomics"]
-git-tree-sha1 = "c06a868224ecba914baa6942988e2f2aade419be"
+git-tree-sha1 = "b5bb4dc6248fde467be2a863eb8452993e74d402"
 uuid = "a9b6321e-bd34-4604-b9c9-b65b8de01458"
-version = "0.1.0"
+version = "1.1.1"
+
+    [deps.Atomix.extensions]
+    AtomixCUDAExt = "CUDA"
+    AtomixMetalExt = "Metal"
+    AtomixOpenCLExt = "OpenCL"
+    AtomixoneAPIExt = "oneAPI"
+
+    [deps.Atomix.weakdeps]
+    CUDA = "052768ef-5323-5732-b1bb-66c8b64840ba"
+    Metal = "dde4c033-4e86-420c-a63e-0dd931031962"
+    OpenCL = "08131aa3-fb12-5dee-8b74-c09406e224a2"
+    oneAPI = "8f75cd03-7ff8-4ecb-9b8f-daf728133b1b"
 
 [[deps.BFloat16s]]
 deps = ["LinearAlgebra", "Printf", "Random", "Test"]
@@ -851,9 +863,13 @@ uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
 version = "1.11.0"
 
 [[deps.UnsafeAtomics]]
-git-tree-sha1 = "6331ac3440856ea1988316b46045303bef658278"
+git-tree-sha1 = "b13c4edda90890e5b04ba24e20a310fbe6f249ff"
 uuid = "013be700-e6cd-48c3-b4a1-df204f14c38f"
-version = "0.2.1"
+version = "0.3.0"
+weakdeps = ["LLVM"]
+
+    [deps.UnsafeAtomics.extensions]
+    UnsafeAtomicsLLVM = ["LLVM"]
 
 [[deps.Zlib_jll]]
 deps = ["Libdl"]

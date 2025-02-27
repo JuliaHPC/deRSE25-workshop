@@ -7,8 +7,8 @@
 #> 
 #>     [[frontmatter.author]]
 #>     name = "Valentin Churavy"
-#>     url = "https://vchuravy.dev
 #>     image = "https://avatars.githubusercontent.com/u/145258?v=4"
+#>     url = "https://vchuravy.dev"
 
 using Markdown
 using InteractiveUtils
@@ -179,9 +179,9 @@ version = "1.11.0"
 
 [[deps.Atomix]]
 deps = ["UnsafeAtomics"]
-git-tree-sha1 = "93da6c8228993b0052e358ad592ee7c1eccaa639"
+git-tree-sha1 = "b5bb4dc6248fde467be2a863eb8452993e74d402"
 uuid = "a9b6321e-bd34-4604-b9c9-b65b8de01458"
-version = "1.1.0"
+version = "1.1.1"
 
     [deps.Atomix.extensions]
     AtomixCUDAExt = "CUDA"
@@ -246,9 +246,9 @@ version = "1.1.1"
 
 [[deps.CairoMakie]]
 deps = ["CRC32c", "Cairo", "Cairo_jll", "Colors", "FileIO", "FreeType", "GeometryBasics", "LinearAlgebra", "Makie", "PrecompileTools"]
-git-tree-sha1 = "6d76f05dbc8b7a52deaa7cdabe901735ae7b6724"
+git-tree-sha1 = "15d6504f47633ee9b63be11a0384925ba0c84f61"
 uuid = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
-version = "0.13.1"
+version = "0.13.2"
 
 [[deps.Cairo_jll]]
 deps = ["Artifacts", "Bzip2_jll", "CompilerSupportLibraries_jll", "Fontconfig_jll", "FreeType2_jll", "Glib_jll", "JLLWrappers", "LZO_jll", "Libdl", "Pixman_jll", "Xorg_libXext_jll", "Xorg_libXrender_jll", "Zlib_jll", "libpng_jll"]
@@ -946,15 +946,15 @@ version = "0.5.15"
 
 [[deps.Makie]]
 deps = ["Animations", "Base64", "CRC32c", "ColorBrewer", "ColorSchemes", "ColorTypes", "Colors", "Contour", "Dates", "DelaunayTriangulation", "Distributions", "DocStringExtensions", "Downloads", "FFMPEG_jll", "FileIO", "FilePaths", "FixedPointNumbers", "Format", "FreeType", "FreeTypeAbstraction", "GeometryBasics", "GridLayoutBase", "ImageBase", "ImageIO", "InteractiveUtils", "Interpolations", "IntervalSets", "InverseFunctions", "Isoband", "KernelDensity", "LaTeXStrings", "LinearAlgebra", "MacroTools", "MakieCore", "Markdown", "MathTeXEngine", "Observables", "OffsetArrays", "PNGFiles", "Packing", "PlotUtils", "PolygonOps", "PrecompileTools", "Printf", "REPL", "Random", "RelocatableFolders", "Scratch", "ShaderAbstractions", "Showoff", "SignedDistanceFields", "SparseArrays", "Statistics", "StatsBase", "StatsFuns", "StructArrays", "TriplotBase", "UnicodeFun", "Unitful"]
-git-tree-sha1 = "9680336a5b67f9f9f6eaa018f426043a8cd68200"
+git-tree-sha1 = "e64b545d25e05a609521bfc36724baa072bfd31a"
 uuid = "ee78f7c6-11fb-53f2-987a-cfe4a2b5a57a"
-version = "0.22.1"
+version = "0.22.2"
 
 [[deps.MakieCore]]
 deps = ["ColorTypes", "GeometryBasics", "IntervalSets", "Observables"]
-git-tree-sha1 = "c731269d5a2c85ffdc689127a9ba6d73e978a4b1"
+git-tree-sha1 = "605d6e8f2b7eba7f5bc6a16d297475075d5ea775"
 uuid = "20f20a25-4f0e-4fdf-b5d1-57303727442b"
-version = "0.9.0"
+version = "0.9.1"
 
 [[deps.MappedArrays]]
 git-tree-sha1 = "2dab0221fe2b0f2cb6754eaa743cc266339f527e"
