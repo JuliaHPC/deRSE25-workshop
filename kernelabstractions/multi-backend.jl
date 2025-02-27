@@ -82,10 +82,12 @@ end
 # ╔═╡ f6d36421-e21c-4949-a67a-3ffa10771f7e
 let
 	available_backends = KernelAbstractions.Backend[CPU()]
-	if CUDA.functional()
+	# Always shows all backend when rendering the notebook on GitHub Actions,
+	# notebooks will be static anyway.
+	if CUDA.functional() || get(ENV, "GITHUB_ACTION", "false") == "true"
 		push!(available_backends, CUDABackend())
 	end
-	if oneAPI.functional()
+	if oneAPI.functional() || get(ENV, "GITHUB_ACTION", "false") == "true"
 		push!(available_backends, oneAPIBackend())
 	end
 	@bind backend Select(available_backends)
