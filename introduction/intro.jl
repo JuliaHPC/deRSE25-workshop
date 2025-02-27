@@ -7,8 +7,8 @@
 #> 
 #>     [[frontmatter.author]]
 #>     name = "Valentin Churavy"
-#>     url = "https://vchuravy.dev"
 #>     image = "https://avatars.githubusercontent.com/u/145258?v=4"
+#>     url = "https://vchuravy.dev"
 
 using Markdown
 using InteractiveUtils
@@ -501,11 +501,6 @@ MPI.Barrier(comm)
 ```
 """
 
-# ╔═╡ 3a047128-7a69-4b88-8322-1b87f5950672
-md"""
-### MPIPreferences.jl
-"""
-
 # ╔═╡ 1914c723-d9cd-4269-9a3d-ce617c854ce4
 md"""
 ## JuliaGPU
@@ -738,9 +733,6 @@ md"""
 - ThreadPinning.jl
 - OhMyThreads.jl
 """
-
-# ╔═╡ 2ea55487-7989-43c3-9b04-c1baef7a4ed3
-
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -2329,7 +2321,7 @@ version = "3.6.0+0"
 # ╠═ec185c9f-7909-47d8-8cc6-05b252d72a5d
 # ╠═5fc10869-ac5e-4440-ac36-eed90bffef8c
 # ╟─f09b6ee6-eea3-480f-b7b8-395b1575fdbe
-# ╠═c379062d-8b73-4b2a-a1ea-3ed2175ab7d8
+# ╟─c379062d-8b73-4b2a-a1ea-3ed2175ab7d8
 # ╠═639f9f11-aa65-473b-b24d-44f60b913d83
 # ╠═e42751a8-be45-418e-854d-6802ae47d8cd
 # ╠═42f1ca4e-2a03-47a7-be15-20a67c25f020
@@ -2337,7 +2329,6 @@ version = "3.6.0+0"
 # ╟─b1dcb967-cfd4-4961-9c70-d9e027be5eee
 # ╟─2497e952-8220-46e5-a1c5-4c24631bc026
 # ╟─fc674951-8a6a-4d2c-8d43-d9626f62e028
-# ╠═3a047128-7a69-4b88-8322-1b87f5950672
 # ╟─1914c723-d9cd-4269-9a3d-ce617c854ce4
 # ╟─9532853d-67b2-4980-a7ea-3fc872694d92
 # ╟─fe95495e-674f-4d0a-a330-8ee9b0d91b6a
@@ -2348,6 +2339,5 @@ version = "3.6.0+0"
 # ╟─0d7ad3a6-6754-4a7e-ab1b-85dda17044b2
 # ╟─7d5f4c81-6913-4bee-a8e0-e5fe01e436db
 # ╟─7c39d8fb-02c8-4b9c-8b54-704468ac38ce
-# ╠═2ea55487-7989-43c3-9b04-c1baef7a4ed3
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
