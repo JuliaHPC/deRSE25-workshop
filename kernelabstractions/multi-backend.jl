@@ -4,6 +4,7 @@
 #> [frontmatter]
 #> title = "KernelAbstractions"
 #> date = "2025-02-26"
+#> license = "MIT"
 #> tags = ["deRSE25", "multi-threading", "julialang"]
 #> description = "Demo of multi-backend KernelAbstraction code"
 #>
