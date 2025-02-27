@@ -472,6 +472,79 @@ Y .= a .* X .+ Y
 
 """
 
+# ╔═╡ ff999e4d-9581-44f7-9ef3-47c496fec310
+md"""
+### High-level array based programming
+
+Julia and GPUArrays.jl provide support for an efficient GPU programming environment build around array abstractions and higher-order functions.
+
+- **Vocabulary of operations**: `map`, `broadcast`, `scan`, `reduce`, ... 
+  Map naturally onto GPU execution models
+- **Compiled to efficient code**: multiple dispatch, specialization
+  Write generic, reusable applications
+- BLAS (matrix-multiply, ...), and other libraries like FFT
+
+> Array operators using multiple dispatch: a design methodology for array implementations in dynamic languages (doi:10.1145/2627373.2627383)
+
+> Rapid software prototyping for heterogeneous and distributed platforms (doi:10.1016/j.advengsoft.2019.02.002)
+"""
+
+# ╔═╡ cf29f290-477e-4ac4-99dc-d4705d49ad0e
+md"""
+Array types -- **where** memory resides and **how** code is executed.
+
+|  |  |
+| --- | --- |
+|  `A = Matrix{Float64}(undef, 64, 32)`   | CPU   |
+|  `A = CuMatrix{Float64}(undef, 64, 32)`   | Nvidia GPU   |
+|  `A = ROCMatrix{Float64}(undef, 64, 32)`   | AMD GPU   |
+
+!!! info
+    Data movement is explicit.
+"""
+
+# ╔═╡ d5e1d232-4a88-45f1-ace5-0f2c1ba47423
+md"""
+### What makes an application portable?
+
+1. Can I **run** it on a different compute architecture
+    1. Different CPU architectures
+    2. We live in a mult GPU vendor world
+2. Does it **compute** the same thing?
+    1. Can I develop on one platform and move to another later?
+3. Does it achieve the same **performance**?
+4. Can I take advantage of platform **specific** capabilities?
+
+> Productivity meets Performance: Julia on A64FX (doi:10.1109/CLUSTER51413.2022.00072)
+"""
+
+# ╔═╡ 5a3c565c-2a5f-436c-90ba-92ccbb39509d
+md"""
+### Adapt.jl
+
+[Adapt.jl](https://github.com/JuliaGPU/Adapt.jl) is a lightweight dependency that you can use to convert complex structures from CPU to GPU.
+
+```julia
+using Adapt
+adapt(CuArray, ::Adjoint{Array})::Adjoint{CuArray}
+```
+
+```julia
+struct Model{T<:Number, AT<:AbstractArray{T}}
+   data::AT
+end
+
+Adapt.adapt_structure(to, x::Model) = Model(adapt(to, x.data))
+
+
+cpu = Model(rand(64, 64));
+using CUDA
+
+gpu = adapt(CuArray, cpu)
+Model{Float64, CuArray{Float64, 2, CUDA.Mem.DeviceBuffer}}(...)
+```
+"""
+
 # ╔═╡ 7d5f4c81-6913-4bee-a8e0-e5fe01e436db
 md"""
 ## Shared-memory parallelism
@@ -2123,6 +2196,10 @@ version = "3.6.0+0"
 # ╟─1914c723-d9cd-4269-9a3d-ce617c854ce4
 # ╟─9532853d-67b2-4980-a7ea-3fc872694d92
 # ╟─fe95495e-674f-4d0a-a330-8ee9b0d91b6a
+# ╟─ff999e4d-9581-44f7-9ef3-47c496fec310
+# ╟─cf29f290-477e-4ac4-99dc-d4705d49ad0e
+# ╟─d5e1d232-4a88-45f1-ace5-0f2c1ba47423
+# ╟─5a3c565c-2a5f-436c-90ba-92ccbb39509d
 # ╟─7d5f4c81-6913-4bee-a8e0-e5fe01e436db
 # ╟─7c39d8fb-02c8-4b9c-8b54-704468ac38ce
 # ╠═2ea55487-7989-43c3-9b04-c1baef7a4ed3
