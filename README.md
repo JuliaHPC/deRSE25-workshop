@@ -97,3 +97,12 @@ If you want to make your app accessible to others (please remember to make sure 
 The `.devcontainer` used here has been adapted from the [Julia workshop for the UCL Festival of Digital Research & Scholarship 2024](https://github.com/UCL-ARC/julia-workshop), in turn based on the [Zero-setup R workshops with GitHub Codespaces](https://github.com/revodavid/devcontainers-rstudio) repository presented at [rstudio::conf 2022](https://rstudioconf2022.sched.com/event/11iag/zero-setup-r-workshops-with-github-codespaces).
 
 </details>
+
+## Further resources
+
+If you have further questions about the use of Julia, especially in HPC setting, check out
+
+* the [Julia Discourse web forum](https://discourse.julialang.org/) for asking questions
+* the [Julia on HPC clusters notes](https://juliahpc.github.io/)
+
+Everyone is also welcome to join the fortnightly [Julia HPC community calls](https://julialang.org/community/#events), the 2nd Thursday (at a European-friendly time) and the 4th Tuesday (at an American-friendly time) of the month.
