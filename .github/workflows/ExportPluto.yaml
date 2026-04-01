@@ -38,7 +38,7 @@ jobs:
           version: "1" # This will automatically pick the latest Julia version
 
       - name: Cache Julia artifacts & such
-        uses: julia-actions/cache@v2
+        uses: julia-actions/cache@v3
 
       - name: Run & export Pluto notebooks
         run: |
